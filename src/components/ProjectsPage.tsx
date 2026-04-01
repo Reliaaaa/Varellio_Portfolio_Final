@@ -1,0 +1,93 @@
+import { useEffect, useState } from "react";
+import { motion } from "motion/react";
+import { ArrowRight } from "lucide-react";
+import { cn } from "../lib/utils";
+
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  year: string;
+  description: string;
+  image_url: string;
+}
+
+export function ProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    fetch("/api/projects").then((res) => res.json()).then(setProjects);
+  }, []);
+
+  return (
+    <main className="pt-32">
+      <section className="px-6 md:px-12 mb-20 max-w-[1440px] mx-auto">
+        <span className="text-xs font-semibold tracking-[0.1em] uppercase text-primary mb-4 block">
+          Archive 001-004
+        </span>
+        <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-tight max-w-4xl text-on-surface">
+          Selected <span className="text-primary italic">Archive</span>
+        </h1>
+        <p className="text-on-surface-variant mt-6 font-light leading-relaxed max-w-xl text-lg">
+          A curation of systems developed with obsessive focus on detail and performance.
+        </p>
+      </section>
+
+      <section className="bg-white py-20 px-6 md:px-12">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24">
+            {projects.map((project, index) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className={cn("flex flex-col", index % 2 !== 0 && "md:mt-20")}
+              >
+                <div className="aspect-[4/5] overflow-hidden rounded-xl mb-8 group bg-surface-container">
+                  <img
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out-expo"
+                    src={project.image_url}
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <span className="text-[0.65rem] font-bold uppercase tracking-widest text-primary">
+                      {project.category}
+                    </span>
+                    <h3 className="text-2xl font-bold mt-2">{project.title}</h3>
+                  </div>
+                  <span className="text-on-surface-variant font-light text-sm italic">
+                    {project.year}
+                  </span>
+                </div>
+                <p className="text-on-surface-variant mt-4 font-light leading-relaxed max-w-sm">
+                  {project.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-40 px-6 md:px-12 max-w-[1440px] mx-auto text-center">
+        <h2 className="text-5xl md:text-6xl font-bold tracking-tight mb-12">
+          Interested in working together?
+        </h2>
+        <div className="flex flex-col md:flex-row justify-center gap-6">
+          <a 
+            href="https://wa.me/6285859869377" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="px-10 py-5 bg-primary text-white rounded-xl font-bold text-lg hover:scale-95 duration-200 transition-transform inline-block"
+          >
+            Start a project
+          </a>
+        </div>
+      </section>
+    </main>
+  );
+}
