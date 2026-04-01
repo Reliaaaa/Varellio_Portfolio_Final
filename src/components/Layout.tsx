@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export function Header() {
   const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -11,11 +14,13 @@ export function Header() {
   ];
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-md">
+    <nav className="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-md border-b border-slate-200/20">
       <div className="flex justify-between items-center px-6 md:px-12 py-6 max-w-[1440px] mx-auto">
         <Link to="/" className="text-xl font-bold tracking-tighter text-slate-900">
           V671 PORTFOLIO
         </Link>
+        
+        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-10 font-light tracking-tight">
           {navLinks.map((link) => (
             <Link
@@ -30,13 +35,51 @@ export function Header() {
             </Link>
           ))}
         </div>
-        <a 
-          href="mailto:varelliolouis@gmail.com"
-          className="px-6 py-2 bg-primary text-white rounded-xl font-semibold hover:scale-95 duration-200 ease-out-expo transition-transform"
-        >
-          Email
-        </a>
+
+        <div className="flex items-center gap-4">
+          <a 
+            href="mailto:varelliolouis@gmail.com"
+            className="hidden md:inline-block px-6 py-2 bg-primary text-white rounded-xl font-semibold hover:scale-95 duration-200 ease-out-expo transition-transform"
+          >
+            Email
+          </a>
+          
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="md:hidden p-2 text-slate-600 hover:text-slate-900 transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Navigation Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-slate-200 shadow-lg py-4 px-6 flex flex-col gap-4">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={cn(
+                "text-lg py-2 transition-colors",
+                location.pathname === link.path ? "text-primary font-bold" : "text-slate-600"
+              )}
+            >
+              {link.name}
+            </Link>
+          ))}
+          <a 
+            href="mailto:varelliolouis@gmail.com"
+            className="mt-4 px-6 py-3 bg-primary text-white rounded-xl font-semibold text-center hover:bg-primary/90 transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Email Me
+          </a>
+        </div>
+      )}
     </nav>
   );
 }
