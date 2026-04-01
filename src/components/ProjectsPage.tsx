@@ -1,23 +1,10 @@
-import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { cn } from "../lib/utils";
-
-interface Project {
-  id: number;
-  title: string;
-  category: string;
-  year: string;
-  description: string;
-  image_url: string;
-}
+import { projectsData } from "../data";
 
 export function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-
-  useEffect(() => {
-    fetch("/api/projects").then((res) => res.json()).then(setProjects);
-  }, []);
+  const projects = projectsData;
 
   return (
     <main className="pt-32">

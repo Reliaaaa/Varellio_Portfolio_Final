@@ -1,29 +1,10 @@
-import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Database, ArrowRight } from "lucide-react";
 import { cn } from "../lib/utils";
-
-interface Skill {
-  id: number;
-  name: string;
-  category: string;
-}
-
-interface Project {
-  id: number;
-  title: string;
-  category: string;
-  year: string;
-  description: string;
-  image_url: string;
-}
+import { skillsData } from "../data";
 
 export function SkillsPage() {
-  const [skills, setSkills] = useState<Skill[]>([]);
-
-  useEffect(() => {
-    fetch("/api/skills").then((res) => res.json()).then(setSkills);
-  }, []);
+  const skills = skillsData;
 
   return (
     <main className="pt-32">
