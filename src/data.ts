@@ -75,7 +75,7 @@ export const projectsData: Project[] = [
     title: "Frateran Cup XXV & Solve the Case",
     category: "Event Production",
     year: "2023 - 2025",
-    description: "Acted as an Treasure, Operator, Test Writer, and Proctor for major school events including Frateran Cup XXV and Frateran Solve the Case.",
+    description: "Acted as an Treasurer, Operator, Test Writer, and Proctor for major school events including Frateran Cup XXV and Frateran Solve the Case.",
     image_url: "/fratcup.jpg"
   },
   {
