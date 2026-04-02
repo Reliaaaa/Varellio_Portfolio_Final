@@ -34,7 +34,7 @@ const SEED_DATA = {
     { year: "2025 - Present", title: "Part-Time Stock Retailer", company: "Self-Taught", tags: "Home" },
     { year: "2024 - Present", title: "Part-Time Forex Trader", company: "Self-Taught", tags: "Home" },
     { year: "2019 - Present", title: "Tech Enthusiast", company: "Self-Taught", tags: "Home" },
-    { year: "2025 - 2026", title: "Treasuer", company: "Catholic Highschool Frateran Surabaya", tags: "Student Council" },
+    { year: "2025 - 2026", title: "Treasuer", company: "Student Council", tags: "Catholic Highschool Frateran Surabaya" },
     { year: "2025", title: "Operator", company: "Frateran Cup XXV", tags: "Catholic Highschool Frateran Surabaya" },
     { year: "2025", title: "Operator", company: "Frateran Solve the Case", tags: "Catholic Highschool Frateran Surabaya" },
     { year: "2025", title: "2nd Winner Digital Bussiness Competition", company: "University of Widya Mandala", tags: "Achievement" },
