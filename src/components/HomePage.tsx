@@ -1,24 +1,16 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Terminal, Activity } from "lucide-react";
-import { fetchJson } from "../lib/api";
-
-interface Experience {
-  id: number;
-  year: string;
-  title: string;
-  company: string;
-  tags: string;
-}
+import { getExperience, type Experience } from "../lib/db";
 
 export function HomePage() {
   const [experience, setExperience] = useState<Experience[]>([]);
 
   useEffect(() => {
-    fetchJson<Experience[]>("/api/experience")
+    getExperience()
       .then(setExperience)
       .catch((error) => {
-        console.error("Failed to fetch experience data.", error);
+        console.error("Failed to load experience data.", error);
         setExperience([]);
       });
   }, []);

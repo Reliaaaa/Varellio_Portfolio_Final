@@ -2,25 +2,16 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { cn } from "../lib/utils";
-import { fetchJson } from "../lib/api";
-
-interface Project {
-  id: number;
-  title: string;
-  category: string;
-  year: string;
-  description: string;
-  image_url: string;
-}
+import { getProjects, type Project } from "../lib/db";
 
 export function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    fetchJson<Project[]>("/api/projects")
+    getProjects()
       .then(setProjects)
       .catch((error) => {
-        console.error("Failed to fetch projects data.", error);
+        console.error("Failed to load projects data.", error);
         setProjects([]);
       });
   }, []);

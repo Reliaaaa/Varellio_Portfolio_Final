@@ -2,22 +2,16 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Database, ArrowRight } from "lucide-react";
 import { cn } from "../lib/utils";
-import { fetchJson } from "../lib/api";
-
-interface Skill {
-  id: number;
-  name: string;
-  category: string;
-}
+import { getSkills, type Skill } from "../lib/db";
 
 export function SkillsPage() {
   const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
-    fetchJson<Skill[]>("/api/skills")
+    getSkills()
       .then(setSkills)
       .catch((error) => {
-        console.error("Failed to fetch skills data.", error);
+        console.error("Failed to load skills data.", error);
         setSkills([]);
       });
   }, []);
