@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Terminal, Activity } from "lucide-react";
+import { fetchJson } from "../lib/api";
 
 interface Experience {
   id: number;
@@ -14,9 +15,12 @@ export function HomePage() {
   const [experience, setExperience] = useState<Experience[]>([]);
 
   useEffect(() => {
-    fetch("/api/experience")
-      .then((res) => res.json())
-      .then(setExperience);
+    fetchJson<Experience[]>("/api/experience")
+      .then(setExperience)
+      .catch((error) => {
+        console.error("Failed to fetch experience data.", error);
+        setExperience([]);
+      });
   }, []);
 
   return (

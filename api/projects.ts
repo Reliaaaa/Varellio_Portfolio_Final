@@ -1,9 +1,8 @@
-import { getDb } from "./_db";
+import { queryTable } from "./_db";
 
-export default function handler(_req: any, res: any) {
+export default async function handler(_req: any, res: any) {
   try {
-    const db = getDb();
-    const data = db.prepare("SELECT * FROM projects ORDER BY id ASC").all();
+    const data = await queryTable("projects");
     res.setHeader("Cache-Control", "s-maxage=120, stale-while-revalidate=300");
     res.status(200).json(data);
   } catch (error) {

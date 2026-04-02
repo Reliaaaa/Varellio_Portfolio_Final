@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { cn } from "../lib/utils";
+import { fetchJson } from "../lib/api";
 
 interface Project {
   id: number;
@@ -16,7 +17,12 @@ export function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    fetch("/api/projects").then((res) => res.json()).then(setProjects);
+    fetchJson<Project[]>("/api/projects")
+      .then(setProjects)
+      .catch((error) => {
+        console.error("Failed to fetch projects data.", error);
+        setProjects([]);
+      });
   }, []);
 
   return (
