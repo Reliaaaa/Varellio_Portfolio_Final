@@ -3,7 +3,9 @@ import { createServer as createViteServer } from "vite";
 import Database from "better-sqlite3";
 import path from "path";
 
-const db = new Database("portfolio.db");
+const isVercel = process.env.VERCEL === "1";
+const dbPath = isVercel ? "/tmp/portfolio.db" : "portfolio.db";
+const db = new Database(dbPath);
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS experience (
@@ -85,7 +87,7 @@ if (projectsCount.count === 0) {
     "Frateran Cup XXV & Solve the Case",
     "Event Production",
     "2023 - 2025",
-    "Acted as an Treasure, Operator, Test Writer, and Proctor for major school events including Frateran Cup XXV and Frateran Solve the Case.",
+    "Acted as an Treasurer, Operator, Test Writer, and Proctor for major school events including Frateran Cup XXV and Frateran Solve the Case.",
     "/fratcup.jpg"
   );
   insertProject.run(
@@ -97,26 +99,27 @@ if (projectsCount.count === 0) {
   );
 }
 
+const app = express();
+
+app.use(express.json());
+
+app.get("/api/experience", (req, res) => {
+  const data = db.prepare("SELECT * FROM experience ORDER BY id ASC").all();
+  res.json(data);
+});
+
+app.get("/api/skills", (req, res) => {
+  const data = db.prepare("SELECT * FROM skills ORDER BY id ASC").all();
+  res.json(data);
+});
+
+app.get("/api/projects", (req, res) => {
+  const data = db.prepare("SELECT * FROM projects ORDER BY id ASC").all();
+  res.json(data);
+});
+
 async function startServer() {
-  const app = express();
   const PORT = 3000;
-
-  app.use(express.json());
-
-  app.get("/api/experience", (req, res) => {
-    const data = db.prepare("SELECT * FROM experience ORDER BY id ASC").all();
-    res.json(data);
-  });
-
-  app.get("/api/skills", (req, res) => {
-    const data = db.prepare("SELECT * FROM skills ORDER BY id ASC").all();
-    res.json(data);
-  });
-
-  app.get("/api/projects", (req, res) => {
-    const data = db.prepare("SELECT * FROM projects ORDER BY id ASC").all();
-    res.json(data);
-  });
 
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
@@ -137,4 +140,10 @@ async function startServer() {
   });
 }
 
-startServer();
+// Jika TIDAK berjalan di Vercel, jalankan server seperti biasa (untuk AI Studio / Local)
+if (!isVercel) {
+  startServer();
+}
+
+// Export app untuk Vercel Serverless Function
+export default app;

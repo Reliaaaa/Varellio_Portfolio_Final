@@ -18,17 +18,3 @@ View your app in AI Studio: https://ai.studio/apps/19c0144c-71f5-4fa4-9666-1524c
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
-
-## Deploy to Vercel
-
-This project now uses Vercel serverless API routes in the `api/` folder:
-
-- `/api/experience`
-- `/api/skills`
-- `/api/projects`
-
-Important behavior for SQLite on Vercel:
-
-1. `portfolio.db` is bundled with the function using `vercel.json`.
-2. The database is opened in read-only mode in production.
-3. Do not rely on runtime writes for persistent data on Vercel.
