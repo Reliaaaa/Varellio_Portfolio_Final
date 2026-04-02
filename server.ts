@@ -4,7 +4,7 @@ import Database from "better-sqlite3";
 import path from "path";
 
 const isVercel = process.env.VERCEL === "1";
-const dbPath = isVercel ? "/tmp/portfolio.db" : "portfolio.db";
+const dbPath = "portfolio.db";
 const db = new Database(dbPath);
 
 db.exec(`
