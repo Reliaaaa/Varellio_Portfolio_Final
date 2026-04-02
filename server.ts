@@ -1,11 +1,7 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
-import path from "path";
 import Database from "better-sqlite3";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import path from "path";
 
 const db = new Database("portfolio.db");
 
@@ -17,13 +13,11 @@ db.exec(`
     company TEXT,
     tags TEXT
   );
-
   CREATE TABLE IF NOT EXISTS skills (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
     category TEXT
   );
-
   CREATE TABLE IF NOT EXISTS projects (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT,
@@ -48,7 +42,10 @@ if (experienceCount.count === 0) {
   insertExp.run("2024", "Excecutive Chair of Frateran Share & Care", "Student Council", "Catholic Highschool Frateran Surabaya");
   insertExp.run("2024 — 2025", "Social & Public Relations", "Student Council", "Catholic Highschool Frateran Surabaya");
   insertExp.run("2023", "Test Writers & Proctors", "Frateran Solve the Case", "Catholic Highschool Frateran Surabaya");
+}
 
+const skillsCount = db.prepare("SELECT count(*) as count FROM skills").get() as { count: number };
+if (skillsCount.count === 0) {
   const insertSkill = db.prepare("INSERT INTO skills (name, category) VALUES (?, ?)");
   insertSkill.run("Bussiness Analysis", "Finance");
   insertSkill.run("Financial Accounting", "Finance");
@@ -65,7 +62,10 @@ if (experienceCount.count === 0) {
   insertSkill.run("Canva", "Tools");
   insertSkill.run("Microsoft Excel", "Tools");
   insertSkill.run("Microsoft Word", "Tools");
+}
 
+const projectsCount = db.prepare("SELECT count(*) as count FROM projects").get() as { count: number };
+if (projectsCount.count === 0) {
   const insertProject = db.prepare("INSERT INTO projects (title, category, year, description, image_url) VALUES (?, ?, ?, ?, ?)");
   insertProject.run(
     "Digital Business Competition",
@@ -109,12 +109,12 @@ async function startServer() {
   });
 
   app.get("/api/skills", (req, res) => {
-    const data = db.prepare("SELECT * FROM skills").all();
+    const data = db.prepare("SELECT * FROM skills ORDER BY id ASC").all();
     res.json(data);
   });
 
   app.get("/api/projects", (req, res) => {
-    const data = db.prepare("SELECT * FROM projects").all();
+    const data = db.prepare("SELECT * FROM projects ORDER BY id ASC").all();
     res.json(data);
   });
 
@@ -125,15 +125,15 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), "dist");
+    const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(distPath, 'index.html'));
     });
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(\`Server running on http://localhost:\${PORT}\`);
   });
 }
 
