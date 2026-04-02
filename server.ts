@@ -85,7 +85,7 @@ if (projectsCount.count === 0) {
     "Frateran Cup XXV & Solve the Case",
     "Event Production",
     "2023 - 2025",
-    "Acted as an Treasure, Operator, Test Writer, and Proctor for major school events including Frateran Cup XXV and Frateran Solve the Case.",
+    "Acted as an Treasurer, Operator, Test Writer, and Proctor for major school events including Frateran Cup XXV and Frateran Solve the Case.",
     "/fratcup.jpg"
   );
   insertProject.run(
