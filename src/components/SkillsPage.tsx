@@ -1,10 +1,20 @@
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Database, ArrowRight } from "lucide-react";
 import { cn } from "../lib/utils";
-import { skillsData } from "../data";
+
+interface Skill {
+  id: number;
+  name: string;
+  category: string;
+}
 
 export function SkillsPage() {
-  const skills = skillsData;
+  const [skills, setSkills] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    fetch("/api/skills").then((res) => res.json()).then(setSkills);
+  }, []);
 
   return (
     <main className="pt-32">

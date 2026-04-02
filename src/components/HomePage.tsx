@@ -1,9 +1,23 @@
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Terminal, Activity } from "lucide-react";
-import { experienceData } from "../data";
+
+interface Experience {
+  id: number;
+  year: string;
+  title: string;
+  company: string;
+  tags: string;
+}
 
 export function HomePage() {
-  const experience = experienceData;
+  const [experience, setExperience] = useState<Experience[]>([]);
+
+  useEffect(() => {
+    fetch("/api/experience")
+      .then((res) => res.json())
+      .then(setExperience);
+  }, []);
 
   return (
     <main className="pt-24">

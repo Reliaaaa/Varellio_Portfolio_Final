@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { motion } from "motion/react";
 import { cn } from "../lib/utils";
 
 export function Header() {
@@ -14,7 +15,7 @@ export function Header() {
   ];
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-md border-b border-slate-200/20">
+    <nav className="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-md">
       <div className="flex justify-between items-center px-6 md:px-12 py-6 max-w-[1440px] mx-auto">
         <Link to="/" className="text-xl font-bold tracking-tighter text-slate-900">
           V671 PORTFOLIO
@@ -22,49 +23,58 @@ export function Header() {
         
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-10 font-light tracking-tight">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              className={cn(
-                "transition-colors hover:text-slate-900",
-                location.pathname === link.path ? "text-slate-900 font-bold border-b-2 border-primary pb-1" : "text-slate-500"
-              )}
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.path;
+            return (
+              <Link
+                key={link.name}
+                to={link.path}
+                className={cn(
+                  "relative py-1 transition-colors hover:text-slate-900",
+                  isActive ? "text-slate-900 font-bold" : "text-slate-500"
+                )}
+              >
+                {link.name}
+                {isActive && (
+                  <motion.div
+                    layoutId="header-active-link"
+                    className="absolute left-0 right-0 bottom-0 h-0.5 bg-primary"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </Link>
+            );
+          })}
         </div>
 
         <div className="flex items-center gap-4">
           <a 
             href="mailto:varelliolouis@gmail.com"
-            className="hidden md:inline-block px-6 py-2 bg-primary text-white rounded-xl font-semibold hover:scale-95 duration-200 ease-out-expo transition-transform"
+            className="hidden md:block px-6 py-2 bg-primary text-white rounded-xl font-semibold hover:scale-95 duration-200 ease-out-expo transition-transform"
           >
             Email
           </a>
           
           {/* Mobile Menu Toggle */}
           <button 
-            className="md:hidden p-2 text-slate-600 hover:text-slate-900 transition-colors"
+            className="md:hidden p-2 text-slate-900"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Navigation Menu */}
+      {/* Mobile Navigation */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-slate-200 shadow-lg py-4 px-6 flex flex-col gap-4">
+        <div className="md:hidden absolute top-full left-0 w-full bg-white border-t border-slate-100 shadow-lg py-4 px-6 flex flex-col gap-4">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               to={link.path}
               onClick={() => setIsMobileMenuOpen(false)}
               className={cn(
-                "text-lg py-2 transition-colors",
+                "text-lg transition-colors py-2",
                 location.pathname === link.path ? "text-primary font-bold" : "text-slate-600"
               )}
             >
@@ -73,8 +83,7 @@ export function Header() {
           ))}
           <a 
             href="mailto:varelliolouis@gmail.com"
-            className="mt-4 px-6 py-3 bg-primary text-white rounded-xl font-semibold text-center hover:bg-primary/90 transition-colors"
-            onClick={() => setIsMobileMenuOpen(false)}
+            className="mt-2 w-full text-center px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:scale-95 duration-200 transition-transform"
           >
             Email Me
           </a>
