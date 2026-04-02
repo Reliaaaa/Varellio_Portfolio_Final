@@ -28,4 +28,4 @@ Thumbs.db
 .idea/
 
 # Local SQLite scratch/alternate files
-portfolio.sqlite
+# portfolio.sqlite
