@@ -1,6 +1,8 @@
-import initSqlJs, { Database } from 'sql.js';
+import initSqlJs from 'sql.js';
 
-let db: Database | null = null;
+type SqlJsDatabase = Awaited<ReturnType<typeof initSqlJs>> extends { Database: new (...args: unknown[]) => infer D } ? D : never;
+
+let db: SqlJsDatabase | null = null;
 
 const DATA_KEY = 'portfolio_sqlite_db';
 
@@ -90,11 +92,12 @@ const SEED_DATA = {
   ]
 };
 
-export async function initDatabase(): Promise<Database> {
+export async function initDatabase(): Promise<SqlJsDatabase> {
   if (db) return db;
 
+  const wasmBinary = await fetch('/sql-wasm.wasm').then(res => res.arrayBuffer());
   const SQL = await initSqlJs({
-    locateFile: file => `/${file}`
+    wasmBinary
   });
 
   const savedData = localStorage.getItem(DATA_KEY);
